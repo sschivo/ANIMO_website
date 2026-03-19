@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>ANIMO - Analysis of Networks with Interactive MOdeling</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="shortcut icon" href="images/A.ico" />
+<!--[if IE ]><style type="text/css">
+.title {
+padding-top:180px;
+}
+</style>
+<![endif]-->
+</head>
+<body>
+<center>
+<div id="all">
+<div id="header">
+
+<div class="title"></div>
+
+<div id="navigation">
+<table>
+<tr><td>
+	[<a href="#">Home</a>]
+</td><td>
+	[<a href="manual.html">Install ANIMO</a>]
+</td><td>
+	[<a href="models.html">ANIMO models</a>]
+</td><td>
+        [<a target="_blank" href="https://webanimo.apps.utwente.nl">NEW: webANIMO</a>]
+</td></tr>
+</table>
+</div>
+
+</div>
+
+<div id="content" align="center">
+<center>
+<table width="90%" align="center">
+<tr align="center"><td>
+<p><b>What is ANIMO?</b></p>
+<p align="justify">
+ANIMO (Analysis of Networks with Interactive MOdeling) is a tool for modeling biological signaling networks. It provides much-needed computational support to the understanding of signaling networks: the general approach is based on a notion of <i>serious game</i>, where the user "plays" with the topology of a network to get a better grasp of its inner workings. The aim is to extend and improve existing network topologies by fitting them to experimental time series of protein activity data.
+</p>
+<p><b>How does it work?</b></p>
+<p align="justify">
+The user interacts with the Cytoscape-based interface, drawing a network topology where nodes represent reactants and arrows represent reactions. In particular, each node represents the <i>activity level</i> of a reactant, i.e. the amount of active molecules with respect to the total molecules of the same species contained in a single cell. These activity levels change dynamically, being updated by the occurrence of reactions directly influencing them. The speed of a reaction is in turn influenced by the activities of the participating reactants: this generates a dynamic system which is modeled <i>under the hood</i> with Timed Automata, and analyzed with the UPPAAL model checker. Time dynamics of the model are shown to the user in a graph, and reflected by the coloring of the network nodes to represent reactnat activities in any chosen instant.
+</p>
+<p align="justify">
+ANIMO runs under Windows, Mac OSX and GNU/Linux distributions and is <b>free for academical use</b>. For commercial uses, please contact us at <img src="images/email.png">.
+</p>
+<p align="justify">
+A series of screenshots and a video are available to give an idea of what the tool looks like. In order to install and run the tool, please read the <a href="manual.html">installation guide</a>. Any questions and/or comments are welcome and can be sent to <img src="images/email.png">.
+</p>
+<a href="images/screenshot1.png" target="_blank"><img width="40%" src="images/screenshot1_small.png"/></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="images/screenshot2.png" target="_blank"><img width="40%" src="images/screenshot2_small.png"/></a><br/><br/><br/><iframe width="560" height="315" src="http://www.youtube.com/embed/acHdqljGBnk" frameborder="0" allowfullscreen></iframe>
+<p><b>About ANIMO</b></p>
+	<p align="justify">
+	The project aims at producing a framework to quantitatively model the interactions happening inside biological cells.
+In particular, the current target is the dynamic evolution of signaling pathways, which are the mechanisms underlying the 
+cellular response to external signals such as growth and death factors.
+The formal foundation of the framework rests on Timed Automata, and models are checked against experimental data 
+thanks to the powerful tool <a href="http://www.uppaal.org" target="_blank">UPPAAL</a>.
+The Timed Automata formalism is hidden behind a user interface based on <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a>, a widely spread 
+program used in modeling biological interactions. This makes it easy for the molecular biologist to test and formulate hypotheses 
+about a specific signaling network without needing any knowledge about the underlying formal model.
+	</p></td></tr></table>
+</center>
+</div>
+</div>
+<div id="footer">&copy; 2015 Stefano Schivo &amp; Brend Wanders</div>
+</center>
+</body>
+</html>
