@@ -1,0 +1,102 @@
+name: Build and deploy Pages with directory indexes
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Generate index.html files in content/models
+        run: |
+          python3 <<'PY'
+          import os
+          from pathlib import Path
+          from html import escape
+
+          ROOT = Path(".")
+          TARGET = ROOT / "content" / "models"
+
+          if not TARGET.exists() or not TARGET.is_dir():
+              raise SystemExit("Folder content/models does not exist")
+
+          def make_index(dirpath: Path):
+              items = []
+
+              rel = dirpath.relative_to(ROOT)
+              title = f"/{rel.as_posix()}/"
+
+              # Parent link (but don't go above TARGET)
+              if dirpath != TARGET:
+                  items.append('<li><a href="../">../</a></li>')
+
+              for child in sorted(dirpath.iterdir(), key=lambda p: (p.is_file(), p.name.lower())):
+                  if child.name.startswith("."):
+                      continue
+                  if child.name == "index.html":
+                      continue
+
+                  href = escape(child.name + ("/" if child.is_dir() else ""))
+                  label = escape(child.name + ("/" if child.is_dir() else ""))
+                  items.append(f'<li><a href="{href}">{label}</a></li>')
+
+              html = f"""<!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Index of {escape(title)}</title>
+            <style>
+              body {{ font-family: system-ui, sans-serif; margin: 2rem; max-width: 60rem; }}
+              h1 {{ font-size: 1.4rem; }}
+              ul {{ line-height: 1.8; }}
+              a {{ text-decoration: none; }}
+              a:hover {{ text-decoration: underline; }}
+            </style>
+          </head>
+          <body>
+            <h1>Index of {escape(title)}</h1>
+            <ul>
+              {''.join(items)}
+            </ul>
+          </body>
+          </html>"""
+
+              (dirpath / "index.html").write_text(html, encoding="utf-8")
+
+          for dirpath, dirnames, filenames in os.walk(TARGET):
+              path = Path(dirpath)
+
+              # Skip hidden directories
+              dirnames[:] = [d for d in dirnames if not d.startswith(".")]
+
+              # Only generate if index.html doesn't already exist
+              if not (path / "index.html").exists():
+                  make_index(path)
+          PY
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
